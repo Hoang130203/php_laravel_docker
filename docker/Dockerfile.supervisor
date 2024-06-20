@@ -1,0 +1,14 @@
+# Sử dụng ảnh chính thức của hệ điều hành có chứa supervisor
+FROM php:8-fpm
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql bcmath
+
+# Cài đặt supervisor
+RUN apt-get update && apt-get install -y supervisor && rm -rf /var/lib/apt/lists/*
+
+# Copy các tệp cấu hình supervisor vào container
+COPY supervisord.conf /etc/supervisor/conf.d
+
+# CMD hoặc ENTRYPOINT cho supervisor
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
